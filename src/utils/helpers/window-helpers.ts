@@ -1,4 +1,4 @@
-import jwt from "jwt-decode";
+import  * as jwt from "jwt-decode";
 import axios from "axios";
 import { env } from "process";
 

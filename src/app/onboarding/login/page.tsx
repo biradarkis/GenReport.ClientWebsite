@@ -20,7 +20,7 @@ export default async function LoginPage() {
       <Card className="w-[1000px] flex h-[400px] max-md:flex-col max-md:h-screen">
         <CardHeader className="w-1/2 h-1/2 flex flex-col justify-center text-center mt-[30px] px-6 max-md:w-full max-md:h-fit">
           <CardTitle className="text-3xl font-bold mb-4">
-            GREPO
+            GENREPORT
           </CardTitle>
           <CardDescription className="text-lg">
             Enter your credentials to access your account.
