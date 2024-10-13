@@ -1,12 +1,42 @@
-import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, combineReducers, EnhancedStore, Reducer } from '@reduxjs/toolkit';
+import menuReducer from  '../slices/menu-impl-slice'
 
-const rootReducer = combineReducers()
-export const store  = configureStore({
-    
-    middleware:
-})
+export default class DefaultStore {
+  
+ store : EnhancedStore | undefined
+ asyncReducers :any = {}
+ staticReducers = {
+  "menuReducer":menuReducer
+ }
 
-export type AppDispatch = typeof store.dispatch;
+ constructor(){
+  this.store = configureStore({
+    reducer:{
+     ...this.staticReducers,
+     ...this.asyncReducers 
+    }
+  })
+  
+ } 
+ addReducerToStore(key:string , reducer :Reducer<any>){
+  if(this.asyncReducers[key]){
+    return 
+  }      
+  this.asyncReducers[key] = reducer;
+
+  this.store?.replaceReducer({
+    ...this.staticReducers,
+    ...this.asyncReducers
+  })
+  
+  
+ }
+
+
+}
+
+
+export type ;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
