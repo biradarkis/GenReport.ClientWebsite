@@ -6,22 +6,17 @@ import { HttpErrorResponse } from "../models/shared/http-error-response";
 import Constants from "../static/constants";
 
 export default class ApiClient {
-  private static instance: AxiosInstance | undefined;
-  static async initClient() {
-        
-    if (this.instance) {
-      return;
-    }
-
+  instance: AxiosInstance | undefined;
+  constructor() {
     this.instance = axios.create({
       baseURL: env.BASE_URL, // Replace with your base URL
       timeout: Number.parseInt(env.REQUEST_TIMEOUT || "5000"), // Set a default timeout (in milliseconds)
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
       },
-      
+
     });
     // this is to handle the 401 error returned by the server 
     this.instance?.interceptors.request.use(this.addJwtToHeaders);
@@ -31,13 +26,13 @@ export default class ApiClient {
     );
   }
 
-  static async sendHttpGet<T extends object>(
+  async sendHttpGet<T extends object>(
     endPoint: string,
     queryString?: URLSearchParams
   ): Promise<HttpResponse<T>> {
     try {
       const response = await this.instance?.get<HttpResponse<T>>(
-        `${endPoint}?${queryString?.toString()||''}`
+        `${endPoint}?${queryString?.toString() || ''}`
       );
       return (
         response?.data ||
@@ -74,7 +69,7 @@ export default class ApiClient {
       );
     }
   }
-  static async sendHttpPost<T>(
+  async sendHttpPost<T>(
     req: any,
     endPoint: string,
     queryParams?: URLSearchParams
@@ -119,8 +114,8 @@ export default class ApiClient {
       );
     }
   }
-  static async addJwtToHeaders(config: any): Promise<any> {
-    if(Constants.excludeJwtValidation.some((e,i,a)=>(config.url as string).startsWith(e))){
+  async addJwtToHeaders(config: any): Promise<any> {
+    if (Constants.excludeJwtValidation.some((e, i, a) => (config.url as string).startsWith(e))) {
       return config;
     }
     const jwtToken = await getJwt();
@@ -129,11 +124,11 @@ export default class ApiClient {
     }
     return config;
   }
-  static async sendHttpPut<T>(
+  async sendHttpPut<T>(
     endPoint: string,
     req: any,
     queryParams?: URLSearchParams,
-    
+
   ) {
     try {
       const response = await this.instance?.put<T>(

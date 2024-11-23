@@ -1,4 +1,4 @@
 export default class Constants {
-   public  static readonly excludeJwtValidation = ["login","signup"]; 
-   public static readonly excludeHeaderBar  = [...this.excludeJwtValidation,]
+   public  static readonly excludeJwtValidation = ["/onboarding/login","/onboarding/signup","/onboarding/resetpassword"]; 
+   public static readonly excludeNavBar  = [...this.excludeJwtValidation,]
 }

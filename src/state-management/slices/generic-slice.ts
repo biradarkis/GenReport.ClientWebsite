@@ -1,4 +1,5 @@
 // src/redux/genericSlice.ts
+import container from '@/utils/di/container';
 import { HttpErrorResponse } from '@/utils/models/shared/http-error-response';
 import { HttpSuccessResponse } from '@/utils/models/shared/http-success-response';
 import ApiClient from '@/utils/services/api-client';
@@ -22,7 +23,8 @@ export function createGenericSlice<T extends object>(name: string, endPoint: str
 
   // Thunk to fetch data from the API
   const fetchGenericData = createAsyncThunk<T|HttpErrorResponse>(`${name}/fetchData`, async () : Promise<T|HttpErrorResponse> => {
-    let response  = await  ApiClient.sendHttpGet<T>(endPoint,queryParams)
+    const client = container.get(ApiClient);
+    let response  = await  client.sendHttpGet<T>(endPoint,queryParams)
     if(response.successResponse){
         return response.successResponse.data  ;
     }

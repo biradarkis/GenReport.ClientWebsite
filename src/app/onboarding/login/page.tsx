@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import ApiClient from "@/utils/services/api-client";
 
 export default async function LoginPage() {
-  await ApiClient.initClient();
+  
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-[1000px] flex h-[400px] max-md:flex-col max-md:h-screen">

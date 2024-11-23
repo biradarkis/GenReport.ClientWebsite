@@ -16,22 +16,24 @@ import { Label } from "@/components/ui/label"
 import { Form, Formik, useFormik } from "formik"
 import * as Yup from "yup"
 import { userSchema } from "@/utils/validations/user-signup-validation"
-import ApiClient from "@/utils/services/api-client"
+import container from "@/utils/di/container"
 import { HttpResponse } from "@/utils/models/shared/http-response"
+import ApiClient from "@/utils/services/api-client"
 
 //const [formData, setFormData] = useState({name: "", email: "", password: "",confirmPassword: ""});
 
 
 
 export default  function SignupPage() {
-   
+  
+  const client  = container.get(ApiClient);
   const {values, touched, errors, handleBlur, handleChange, handleSubmit} = useFormik({
     initialValues: {firstName: "", lastName: "", email: "", password: "", confirmPassword: ""},
     validationSchema: userSchema,
     onSubmit: async function(){
-      await ApiClient.initClient()
+      
       console.log(errors)
-      let res =  await ApiClient.sendHttpPost<HttpResponse<any>>(values,'signup')
+      let res =  await client.sendHttpPost<HttpResponse<any>>(values,'signup')
       console.log(res)
     }
   });

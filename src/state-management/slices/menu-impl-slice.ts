@@ -1,48 +1,44 @@
-// src/redux/slices/dataSlice.ts
-import { HttpResponse } from '@/utils/models/shared/http-response';
-import ApiClient from '@/utils/services/api-client';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+// store/slices/navbarSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface DataState {
-  data: any;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
+export interface NavbarState {
+    menuItems: MenuItem[];
+    access: boolean;
+    loading: boolean;
+    error: string | null;
+    shadowScreenVisible: boolean; // New state
 }
 
-const initialState: DataState = {
-  data: null,
-  status: 'idle',
-  error: null,
+const initialState: NavbarState = {
+    menuItems: [],
+    access: true,
+    loading: false,
+    error: null,
+    shadowScreenVisible: false, // Default to hidden
 };
 
-// Thunk to fetch data from the API
-export const fetchData = createAsyncThunk('data/fetchData', async () => {
-  const response = await ApiClient.sendHttpGet<MenuImpl>("");
-  if(response.successResponse){
-    return response.successResponse.data
-  }
-  console.error("Error Fetching data",response.errorResponse)
+export const navbarSlice = createSlice({
+    name: 'navbar',
+    initialState,
+    reducers: {
+        setAccess: (state, action: PayloadAction<boolean>) => {
+            state.access = action.payload;
+        },
+        showShadowScreen: (state) => {
+            state.shadowScreenVisible = true;
+        },
+        hideShadowScreen: (state) => {
+            state.shadowScreenVisible = false;
+        },
+    },
 });
 
-const menuSlice = createSlice({
-  name: 'data',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchData.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchData.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.data = action.payload;
-      })
-      .addCase(fetchData.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Something went wrong';
-      });
-  },
-});
+export const { setAccess, showShadowScreen, hideShadowScreen } = navbarSlice.actions;
+export default navbarSlice.reducer;
 
-export default menuSlice.reducer;
+interface MenuItem {
+  id: number;
+  label: string;
+  link?: string;
+  children?: MenuItem[];
+}

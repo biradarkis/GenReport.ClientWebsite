@@ -18,7 +18,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-   await ApiClient.initClient()
+
   return (
     <html lang="en">
       <body className={inter.className} >
