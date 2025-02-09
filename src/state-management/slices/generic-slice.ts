@@ -1,5 +1,5 @@
 // src/redux/genericSlice.ts
-import container from '@/utils/di/container';
+import container from '@/utils/di/inversify.config';
 import { HttpErrorResponse } from '@/utils/models/shared/http-error-response';
 import { HttpSuccessResponse } from '@/utils/models/shared/http-success-response';
 import ApiClient from '@/utils/services/api-client';

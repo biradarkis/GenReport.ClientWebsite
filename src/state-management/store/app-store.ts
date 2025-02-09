@@ -1,40 +1,48 @@
-import { configureStore, ThunkAction, Action, combineReducers, EnhancedStore, Reducer } from '@reduxjs/toolkit';
-import menuReducer from '../slices/menu-impl-slice'
-import { injectable } from 'inversify';
+import { configureStore, EnhancedStore, Reducer } from '@reduxjs/toolkit';
+import menuReducer from '../slices/menu-impl-slice';
+import userReducer from '../slices/user-slice';
+import chatReducer from '../slices/chat-slice';
 
-@injectable()
+export type RootState = ReturnType<DefaultStore['getState']>;
+export type AppDispatch = DefaultStore['dispatch'];
+
 export default class DefaultStore {
-
-  store: EnhancedStore | undefined
-  asyncReducers: any = {}
+  store: EnhancedStore | undefined;
+  asyncReducers: any = {};
   staticReducers = {
-    "menuReducer": menuReducer
-  }
+    menu: menuReducer,
+    user: userReducer,
+    chat: chatReducer,
+  };
 
   constructor() {
     this.store = configureStore({
       reducer: {
         ...this.staticReducers,
-        ...this.asyncReducers
-      }
-    })
-
+        ...this.asyncReducers,
+      },
+    });
   }
+
   addReducerToStore(key: string, reducer: Reducer<any>) {
     if (this.asyncReducers[key]) {
-      return
+      return;
     }
     this.asyncReducers[key] = reducer;
 
     this.store?.replaceReducer({
       ...this.staticReducers,
-      ...this.asyncReducers
-    })
-
-
-
+      ...this.asyncReducers,
+    });
   }
 
+  getState = () => {
+    return this.store?.getState();
+  };
+
+  dispatch = (action: any) => {
+    return this.store?.dispatch(action);
+  };
 }
 
 

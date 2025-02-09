@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label"
 import { Form, Formik, useFormik } from "formik"
 import * as Yup from "yup"
 import { userSchema } from "@/utils/validations/user-signup-validation"
-import container from "@/utils/di/container"
+import {container} from "@/utils/di/inversify.config"
 import { HttpResponse } from "@/utils/models/shared/http-response"
 import ApiClient from "@/utils/services/api-client"
 

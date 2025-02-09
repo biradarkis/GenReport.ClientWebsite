@@ -1,4 +1,5 @@
 // store/slices/navbarSlice.ts
+import { container } from '@/utils/di/inversify.config';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface NavbarState {
@@ -32,6 +33,8 @@ export const navbarSlice = createSlice({
         },
     },
 });
+
+
 
 export const { setAccess, showShadowScreen, hideShadowScreen } = navbarSlice.actions;
 export default navbarSlice.reducer;
